@@ -1,0 +1,33 @@
+#!/bin/sh
+
+# taken from
+# http://sourceforge.net/mailarchive/message.php?msg_name=20100527125533.GD20656%40shuttle.babafou.eu.org
+
+set -e
+
+tmp=$(mktemp)
+trap "rm $tmp" EXIT INT
+
+texindy --out-file $tmp --stdin <<\__EOF
+\indexentry{\path{indexed}}{1}
+\indexentry{\emph{Test}}{1}
+__EOF
+
+diff -u - $tmp <<\__EOF
+\begin{theindex}
+  \providecommand*\lettergroupDefault[1]{}
+  \providecommand*\lettergroup[1]{%
+      \par\textbf{#1}\par
+      \nopagebreak
+  }
+
+  \lettergroup{I}
+  \item \path{indexed}, 1
+
+  \indexspace
+
+  \lettergroup{T}
+  \item \emph{Test}, 1
+
+\end{theindex}
+__EOF

@@ -1,0 +1,25 @@
+Use kpsewhich to search for modules.
+Patch by Akira Kakuto, TeX Live subversion: 41315 and 41316
+Performance is lost. However user modules specified by the -M option
+can be under <anytexmf>/xindy/modules/.
+---
+ user-commands/xindy.in |    8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+--- xindy.git.orig/user-commands/xindy.in
++++ xindy.git/user-commands/xindy.in
+@@ -804,7 +804,13 @@
+ 	push (@temp_files, $style_file);
+ 	$style_file=quotify($style_file);
+ 	foreach my $module ( @modules ) {
+-	    print $sf "(require \"$module\")\n";
++	    my $fnmodule=`kpsewhich -progname=xindy -format=othertext $module`;
++	    if ($fnmodule) {
++		chomp($fnmodule);
++		print $sf "(require \"$fnmodule\")\n";
++	    } else {
++		print $sf "(require \"$module\")\n";
++	    }
+ 	}
+ 	close ($sf);
+     }

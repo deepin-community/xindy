@@ -1,0 +1,33 @@
+Description: Incorrect Norwegian sorting of č and šIncorrect Norwegian sorting of č and š
+Author: Petter Reinholdtsen <pere@hungry.com>
+Bug: Debian Bug #968437
+Forwarded: Note done, could be done
+Applied-Upstream: Note done, could be done
+Last-Update: 2020-08-16
+
+--- xindy.orig/make-rules/alphabets/norwegian/utf8.pl.in
++++ xindy/make-rules/alphabets/norwegian/utf8.pl.in
+@@ -11,10 +11,9 @@
+                    [], # a with ogonek (polish)
+ ['B',  ['b','B']],
+                    [], # b with hook (hausa)
+-['C',  ['c','C'],['ç','Ç']],
++['C',  ['c','C'],@u{['č','Č'],}['ç','Ç']],
+                    [], # ch (spanish/traditional)
+                    [], # cs (hungarian)
+-                   [], # c with caron (many)
+                    [], # c with acute (croatian, lower sorbian, polish)
+                    [], # c with circumflex (esperanto)
+                    [], # c with cedilla (albanian, kurdish, turkish)
+@@ -85,10 +84,9 @@
+                    [], # r with caron (czech, slovak/large, upper sorbian)
+                    [], # r with acute (lower sorbian)
+                    [], # r with cedilla/comma (latvian)
+-['S',  ['s','S']],
++['S',  ['s','S'], @u{['š', 'Š']}],
+                    [], # sh (albanian)
+                    [], # sz (hungarian)
+-                   [], # s with caron (many)
+                    [], # s with acute (lower sorbian, polish)
+                    [], # s with circumflex (esperanto)
+                    [], # s with comma below (romanian)

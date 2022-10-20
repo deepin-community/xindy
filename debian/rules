@@ -1,0 +1,123 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+# These are used for cross-compiling and for saving the configure script
+# from having to guess our platform (since we know it already)
+include /usr/share/dpkg/architecture.mk
+
+CPPFLAGS :=$(shell dpkg-buildflags --get CPPFLAGS)
+CFLAGS   :=$(shell dpkg-buildflags --get CFLAGS)
+LDFLAGS  :=$(shell dpkg-buildflags --get LDFLAGS) -Wl,-z,defs
+
+configure_flags = LDFLAGS="$(LDFLAGS)" CFLAGS="$(CFLAGS)" CPPFLAGS="$(CPPFLAGS)"\
+  --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE) --prefix=/usr \
+  --mandir=\$${prefix}/share/man --infodir=\$${prefix}/share/info \
+  --docdir=\$${prefix}/share/doc/xindy-rules
+
+arch_subdirs=src tex2xindy user-commands
+indep_subdirs=modules make-rules doc
+
+xindy_dir=debian/xindy
+
+configure:
+	aclocal -Im4
+	dh_autoreconf
+
+config.status: configure
+	dh_testdir
+	./configure $(configure_flags) --disable-make-rules --disable-docs
+
+config.status-with-latex: configure
+	dh_testdir
+	if [ -e config.status ]; then \
+	    rm -f build-arch-stamp build-indep-stamp; \
+	    $(MAKE) distclean || true; \
+	fi
+	./configure $(configure_flags)
+
+	ln config.status config.status-with-latex
+
+#build: build-indep build-arch
+build:
+
+build-indep: build-indep-stamp
+build-indep-stamp: config.status-with-latex
+	dh_testdir
+
+	for i in $(indep_subdirs); do $(MAKE) -C $$i all || exit 1; done
+
+	touch $@
+
+build-arch: build-arch-stamp
+build-arch-stamp:  config.status
+	dh_testdir
+
+	for i in $(arch_subdirs); do $(MAKE) -C $$i all || exit 1; done
+
+	touch $@
+
+clean:
+	dh_testdir
+	rm -f build-arch-stamp build-indep-stamp config.status-with-latex
+
+	if [ -f Makefile ]; then $(MAKE) distclean; fi
+
+	dh_autoreconf_clean
+	dh_clean
+
+binary-indep: build-indep
+	dh_testdir
+	dh_testroot
+	dh_prep -i
+	dh_installdirs -i
+
+	for i in $(indep_subdirs); do \
+	    $(MAKE) -C $$i install DESTDIR=$(CURDIR)/debian/xindy-rules \
+	      || exit 1; \
+	done
+
+	dh_installchangelogs -i NEWS
+	dh_installdocs -i
+	dh_lintian -i
+	dh_compress -i
+	dh_fixperms -i
+	dh_installdeb -i
+	dh_gencontrol -i
+	dh_md5sums -i
+	dh_builddeb -i
+
+binary-arch: build-arch
+	dh_testdir
+	dh_testroot
+	dh_prep -a
+	dh_installdirs -a
+
+	for i in $(arch_subdirs); do \
+	    $(MAKE) -C $$i install DESTDIR=$(CURDIR)/debian/xindy || exit 1; \
+	done
+
+	dh_link -a usr/share/doc/xindy-rules usr/share/doc/xindy
+	dh_strip -a
+	dh_compress -a
+	chmod -x $(xindy_dir)/usr/lib/xindy/xindy.mem
+	dh_fixperms -a
+	dh_perl -a
+	dh_installdeb -a
+	dh_shlibdeps -a
+	dh_gencontrol -a \
+	  -- -Vclisp:Depends="clisp-memfile-hash-$$(clisp -memfile-hash-of $(xindy_dir)/usr/lib/xindy/xindy.mem)"
+	dh_md5sums -a
+	dh_builddeb -a
+
+binary: binary-indep binary-arch
+
+test:
+	dh_testdir
+	set -e; for i in debian/tests/*; do test -x "$$i" || continue; \
+	  echo "$$i"; "$$i"; done
+
+.PHONY: build build-arch build-indep clean binary-indep binary-arch binary \
+  get-orig-source test

@@ -1,0 +1,194 @@
+Index: xindy/doc/faq-1.html
+===================================================================
+--- xindy.orig/doc/faq-1.html	2019-07-05 13:08:04.476135235 +0200
++++ xindy/doc/faq-1.html	2021-01-16 20:57:54.388553045 +0100
+@@ -71,7 +71,7 @@
+ One example of such a rule would be
+ <P>
+ <PRE>
+-(sort-rule &quot;‰&quot; &quot;ae&quot;)
++(sort-rule &quot;√§&quot; &quot;ae&quot;)
+ </PRE>
+ <P>defining that a word containing the umlaut-a will be sorted as if it
+ contained the letters <CODE>ae</CODE> instead. This is one form of how the
+Index: xindy/doc/faq-4.html
+===================================================================
+--- xindy.orig/doc/faq-4.html	2019-07-05 13:08:04.476135235 +0200
++++ xindy/doc/faq-4.html	2021-01-16 20:57:18.068644484 +0100
+@@ -157,31 +157,31 @@
+ <P>
+ <BLOCKQUOTE><CODE>
+ <PRE>
+-(sort-rule "‰" "ae")
++(sort-rule "√§" "ae")
+ </PRE>
+ </CODE></BLOCKQUOTE>
+ <P>defining that a word containing the umlaut-a will be sorted as if it
+ contained the letters <CODE>ae</CODE> instead. This is one form of how the
+-umlaut-a (‰) is sorted into german indexes. With an appropriate set of
++umlaut-a (√§) is sorted into german indexes. With an appropriate set of
+ rules on can express the complete rules of a specific language.
+ <P>An example of how an appropriate mapping for some of the Roman
+ languages could look like is:
+ <P>
+ <BLOCKQUOTE><CODE>
+ <PRE>
+-(sort-rule "‡" "a")
+-(sort-rule "·" "a")
+-(sort-rule "„" "a")
+-(sort-rule "Ë" "e")
+-(sort-rule "È" "e")
+-(sort-rule "Á" "c")
++(sort-rule "√†" "a")
++(sort-rule "√°" "a")
++(sort-rule "√£" "a")
++(sort-rule "√®" "e")
++(sort-rule "√©" "e")
++(sort-rule "√ß" "c")
+ </PRE>
+ </CODE></BLOCKQUOTE>
+ <P>This makes the accented letters be sorted as their unaccented
+ counterparts, yielding the desired sort ordering.
+ <P>Sometimes it is necessary to specify keyword mappings that tell the
+ system to put something <EM>behind</EM> something else. For instance, we'd
+-like to map the character <EM>ˆ</EM> behind the letter <EM>o</EM>. No problem
++like to map the character <EM>√∂</EM> behind the letter <EM>o</EM>. No problem
+ if you use the special characters <CODE>~b</CODE> and <CODE>~e</CODE> which
+ are called the <EM>beginning</EM> and <EM>ending</EM> characters. The first
+ letter lexicographically precedes all other letters whereas the latter
+@@ -190,10 +190,10 @@
+ <P>
+ <BLOCKQUOTE><CODE>
+ <PRE>
+-(sort-rule "ˆ" "o~e")
++(sort-rule "√∂" "o~e")
+ </PRE>
+ </CODE></BLOCKQUOTE>
+-<P>Now the <EM>ˆ</EM> is directly positioned after the <EM>o</EM> but before
++<P>Now the <EM>√∂</EM> is directly positioned after the <EM>o</EM> but before
+ <EM>p</EM>.
+ <P>
+ <P>See the manual for a detailed description of this feature.
+Index: xindy/doc/manual-3.html
+===================================================================
+--- xindy.orig/doc/manual-3.html	2019-07-05 13:08:04.476135235 +0200
++++ xindy/doc/manual-3.html	2021-01-16 21:00:59.104133219 +0100
+@@ -276,13 +276,13 @@
+ 
+      :inherit-from ("latin-tolower")
+ 
+-     :rules (("¿" "‡" :string :again)
+-             ("¡" "·" :string :again)
+-             ("¬" "‚" :string :again)
+-             ("√" "„" :string :again)
+-             ("ƒ" "‰" :string :again)
+-             ("≈" "Â" :string :again)
+-             ("∆" "Ê" :string :again)
++     :rules (("√Ä" "√†" :string :again)
++             ("√Å" "√°" :string :again)
++             ("√Ç" "√¢" :string :again)
++             ("√É" "√£" :string :again)
++             ("√Ñ" "√§" :string :again)
++             ("√Ö" "√•" :string :again)
++             ("√Ü" "√¶" :string :again)
+           ...
+             )
+    ...)
+Index: xindy/doc/style-tutorial-1.html
+===================================================================
+--- xindy.orig/doc/style-tutorial-1.html	2019-07-05 13:08:04.476135235 +0200
++++ xindy/doc/style-tutorial-1.html	2021-01-16 21:01:13.060102444 +0100
+@@ -47,12 +47,12 @@
+ <P>
+ <BLOCKQUOTE><CODE>
+ <PRE>
+-(sort-rule "‰" "ae")
++(sort-rule "√§" "ae")
+ </PRE>
+ </CODE></BLOCKQUOTE>
+ <P>defining that a word containing the umlaut-a will be sorted as if it
+ contained the letters <CODE>ae</CODE> instead. This is one form of how the
+-umlaut-a ("‰") is sorted into german indexes. With an appropriate set
++umlaut-a ("√§") is sorted into german indexes. With an appropriate set
+ of rules on can express the complete rules of a specific language.
+ <P>
+ <DT><B>User Definable Location Types</B><DD><P>Locations are the entities an
+Index: xindy/doc/style-tutorial-2.html
+===================================================================
+--- xindy.orig/doc/style-tutorial-2.html	2019-07-05 13:08:04.480135242 +0200
++++ xindy/doc/style-tutorial-2.html	2021-01-16 21:02:31.419930067 +0100
+@@ -153,9 +153,9 @@
+ <PRE>
+ \begin{theindex}
+   academia\quad{}{\bf 1}acafetado\quad{}{\bf 2}acalmar\quad{}{\bf 4}
+-  aÁafr„o\quad{}{\bf 3}indexflat\quad{}1hierarchical\quad{}2
++  a√ßafr√£o\quad{}{\bf 3}indexflat\quad{}1hierarchical\quad{}2
+   veryhierarchical\quad{}3impressive\quad{}4saber\quad{}{\bf 7}
+-  sabor\quad{}{\bf 8}sab„o\quad{}{\bf 6}s·bado\quad{}{\bf 5}
++  sabor\quad{}{\bf 8}sab√£o\quad{}{\bf 6}s√°bado\quad{}{\bf 5}
+ \end{theindex}
+ </PRE>
+ </CODE></BLOCKQUOTE>
+@@ -215,7 +215,7 @@
+  \item academia\quad{}{\bf 1}
+  \item acafetado\quad{}{\bf 2}
+  \item acalmar\quad{}{\bf 4}
+- \item aÁafr„o\quad{}{\bf 3}
++ \item a√ßafr√£o\quad{}{\bf 3}
+  \item index
+     \subitem flat\quad{}1
+     \subitem hierarchical\quad{}2
+@@ -224,8 +224,8 @@
+       \subsubitem impressive\quad{}4
+  \item saber\quad{}{\bf 7}
+  \item sabor\quad{}{\bf 8}
+- \item sab„o\quad{}{\bf 6}
+- \item s·bado\quad{}{\bf 5}
++ \item sab√£o\quad{}{\bf 6}
++ \item s√°bado\quad{}{\bf 5}
+ 
+ \end{theindex}
+ </PRE>
+@@ -233,8 +233,8 @@
+ <P>Hmm, as you might have seen there are several problems that need
+ further investigation. The index contains some Portuguese words that
+ are printed correctly but should appear at other positions inside the
+-index. For instance, the word <EM>s·bado</EM> should appear before the
+-word <EM>saber</EM> since <EM>·</EM> must be sorted as if it were simply an
++index. For instance, the word <EM>s√°bado</EM> should appear before the
++word <EM>saber</EM> since <EM>√°</EM> must be sorted as if it were simply an
+ <EM>a</EM>. The reason why these words are not sorted correctly is
+ simple---the accentuated letters have codes beyond position 128 in the
+ ISO-Latin alphabet. Sorting based on these codes yields this incorrect
+@@ -292,12 +292,12 @@
+ <P>
+ <BLOCKQUOTE><CODE>
+ <PRE>
+-(sort-rule "‡" "a")
+-(sort-rule "·" "a")
+-(sort-rule "„" "a")
+-(sort-rule "Ë" "e")
+-(sort-rule "È" "e")
+-(sort-rule "Á" "c")
++(sort-rule "√†" "a")
++(sort-rule "√°" "a")
++(sort-rule "√£" "a")
++(sort-rule "√®" "e")
++(sort-rule "√©" "e")
++(sort-rule "√ß" "c")
+ </PRE>
+ </CODE></BLOCKQUOTE>
+ <P>These rules define mappings from a keyword to a <EM>normalized</EM>
+Index: xindy/doc/style-tutorial-3.html
+===================================================================
+--- xindy.orig/doc/style-tutorial-3.html	2019-07-05 13:08:04.480135242 +0200
++++ xindy/doc/style-tutorial-3.html	2021-01-16 21:01:32.776059009 +0100
+@@ -236,7 +236,7 @@
+  {\bf N}
+  \item nagy\quad{}1
+  \item nagyon\quad{}9
+- \item nËgy\quad{}4
++ \item n√®gy\quad{}4
+ 
+  \indexspace
+ 
